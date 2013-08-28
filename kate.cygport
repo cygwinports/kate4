@@ -1,0 +1,15 @@
+inherit kde4 python
+
+NAME="kate"
+VERSION=4.10.5
+RELEASE=1
+CATEGORY="Editors"
+SUMMARY="KDE advanced text editor"
+DESCRIPTION="Part of the KDE base applications suite"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	python_optimize ${PYTHON_SITELIB} /usr/share/kde4/apps/kate
+}

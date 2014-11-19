@@ -1,15 +1,22 @@
 inherit kde4 python
 
 NAME="kate"
-VERSION=4.13.3
+VERSION=4.14.3
 RELEASE=1
 CATEGORY="Editors"
 SUMMARY="KDE advanced text editor"
 DESCRIPTION="Part of the KDE base applications suite"
 
+PKG_NAMES="kate kate-devel"
+kate_CONTENTS="etc/ usr/bin/ usr/lib/kde4/ ${PYTHON_SITELIB#/} usr/share/"
+kate_devel_REQUIRES="libkdecore-devel"
+kate_devel_CONTENTS="usr/include/ usr/lib/lib*"
+
 src_install() {
 	cd ${B}
 	cyginstall
+
+	rm -f ${D}/usr/lib/libkdeinit4_*
 
 	python_optimize ${PYTHON_SITELIB} /usr/share/kde4/apps/kate
 }

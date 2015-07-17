@@ -1,0 +1,44 @@
+ORIG_PN="kate"
+inherit kde4 python
+
+NAME="kate4"
+VERSION=4.14.3
+RELEASE=3
+CATEGORY="Editors"
+SUMMARY="KDE 4 advanced text editor component"
+DESCRIPTION="Part of the KDE base applications suite"
+
+PKG_NAMES="kate4-part"
+kate4_part_CONTENTS="
+	etc/postinstall/
+	usr/bin/cygkatepartinterfaces-4.dll
+	usr/lib/kde4/katepart.dll
+	usr/lib/kde4/ktexteditor_*.dll
+	usr/share/doc/${NAME}/
+	usr/share/icons/hicolor/*/apps/ktexteditorautobrace.*
+	usr/share/kde4/apps/katepart/
+	usr/share/kde4/apps/ktexteditor_*/
+	usr/share/kde4/config/katemoderc
+	usr/share/kde4/config/kateschemarc
+	usr/share/kde4/config/katesyntaxhighlightingrc
+	usr/share/kde4/config/ktexteditor_*.knsrc
+	usr/share/kde4/services/katepart.desktop
+	usr/share/kde4/services/ktexteditor_*.desktop
+"
+
+src_compile() {
+	cd ${B}
+	kde4_cmake \
+		-DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE \
+		-DBUILD_part=TRUE -DBUILD_addons=TRUE
+	cygmake -C part
+	cygmake -C addons/ktexteditor
+}
+
+src_install() {
+	cd ${B}
+	cyginstall -C part
+	cyginstall -C addons/ktexteditor
+
+	rm -f ${D}/usr/lib/libkatepartinterfaces.dll.a
+}
